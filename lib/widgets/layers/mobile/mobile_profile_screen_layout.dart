@@ -3,6 +3,7 @@ import 'package:dimension_machine_task/widgets/common/mobile/mobile_profile_bann
 import 'package:dimension_machine_task/widgets/common/mobile/mobile_profile_banner_second.dart';
 import 'package:dimension_machine_task/widgets/common/mobile/mobile_profile_info.dart';
 import 'package:dimension_machine_task/widgets/common/mobile/mobile_profile_selection_button.dart';
+import 'package:dimension_machine_task/widgets/layers/mobile/mobile_appbar.dart';
 import 'package:flutter/material.dart';
 
 class MobileProfileScreenLayout extends StatefulWidget {
@@ -21,7 +22,7 @@ class _MobileProfileScreenLayoutState extends State<MobileProfileScreenLayout> {
     
     return Scaffold(
       backgroundColor: Colors.grey[100],
-      appBar: widget.appBar,
+      appBar: MobileAppBar(),
       body: SingleChildScrollView(
         child: Column(
           children: [

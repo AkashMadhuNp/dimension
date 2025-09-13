@@ -26,7 +26,6 @@ class QuickEditsSection extends StatelessWidget {
     final screenWidth = MediaQuery.of(context).size.width;
     final screenHeight = MediaQuery.of(context).size.height;
     
-    // Check if it's mobile (less than 768px)
     final bool isMobile = screenWidth < 768;
     
     if (isMobile) {
@@ -37,13 +36,11 @@ class QuickEditsSection extends StatelessWidget {
   }
 
   Widget _buildMobileGridLayout() {
-    // Skip "Quick Edits" title for grid layout
     final gridItems = _menuItems.skip(1).toList();
     
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
-        // Title
         Padding(
           padding: const EdgeInsets.only(bottom: 16),
           child: Text(
@@ -54,15 +51,15 @@ class QuickEditsSection extends StatelessWidget {
             ),
           ),
         ),
-        // Grid
+        
         GridView.builder(
           shrinkWrap: true,
           physics: const NeverScrollableScrollPhysics(),
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 4,
-            crossAxisSpacing: 8,
+            crossAxisSpacing: 6,
             mainAxisSpacing: 8,
-            childAspectRatio: 2.5, 
+            childAspectRatio: 2, 
           ),
           itemCount: gridItems.length,
           itemBuilder: (context, index) {

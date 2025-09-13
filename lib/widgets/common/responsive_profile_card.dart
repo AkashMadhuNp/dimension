@@ -118,23 +118,28 @@ class ResponsiveProfileContainer extends StatelessWidget {
           child: Row(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              Container(
-                width: avatarSize,
-                height: avatarSize,
-                decoration: BoxDecoration(
-                  color: AppConstants.secondaryColor.withOpacity(0.1),
-                  shape: BoxShape.circle,
-                  border: Border.all(
-                    color: AppConstants.secondaryColor.withOpacity(0.2),
-                    width: 2,
-                  ),
-                ),
-                child: Icon(
-                  Icons.person,
-                  size: iconSize,
-                  color: AppConstants.secondaryColor,
-                ),
+
+              CircleAvatar(
+                radius: avatarSize,
+                backgroundImage: NetworkImage(AppConstants.userProfileImage),
               ),
+              // Container(
+              //   width: avatarSize,
+              //   height: avatarSize,
+              //   decoration: BoxDecoration(
+              //     color: AppConstants.secondaryColor.withOpacity(0.1),
+              //     shape: BoxShape.circle,
+              //     border: Border.all(
+              //       color: AppConstants.secondaryColor.withOpacity(0.2),
+              //       width: 2,
+              //     ),
+              //   ),
+              //   child: Icon(
+              //     Icons.person,
+              //     size: iconSize,
+              //     color: AppConstants.secondaryColor,
+              //   ),
+              // ),
         
               SizedBox(width: horizontalSpacing),
         

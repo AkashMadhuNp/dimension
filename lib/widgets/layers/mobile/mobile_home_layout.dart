@@ -1,10 +1,13 @@
+import 'package:dimension_machine_task/bloc/mob_hom_lay_bloc.dart';
+import 'package:dimension_machine_task/bloc/mob_hom_lay_event.dart';
+import 'package:dimension_machine_task/bloc/mob_hom_lay_state.dart';
+import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dimension_machine_task/service/api_service.dart';
 import 'package:dimension_machine_task/widgets/layers/mobile/mobile_search_section.dart' show MobileSearchSection;
-import 'package:flutter/material.dart';
 import 'package:dimension_machine_task/widgets/layers/mobile/mobile_appbar.dart';
 import 'package:dimension_machine_task/widgets/common/mobile_drawer.dart';
 import 'package:dimension_machine_task/widgets/layers/mobile/mobile_custom_card.dart';
-import 'package:dimension_machine_task/model/post_model.dart';
 
 class MobileHomeLayout extends StatefulWidget {
   const MobileHomeLayout({super.key});
@@ -14,115 +17,20 @@ class MobileHomeLayout extends StatefulWidget {
 }
 
 class _MobileHomeLayoutState extends State<MobileHomeLayout> {
-  final ApiService _apiService = ApiService();
-  List<Post> _posts = [];
-  List<Post> _filteredPosts = [];
-  bool _isLoading = true;
-  bool _isSearching = false;
-  String? _errorMessage;
-  String _currentSearchQuery = '';
-  String _currentLocationQuery = '';
-
   @override
   void initState() {
     super.initState();
-    _fetchPosts();
+    context.read<PostsBloc>().add(const FetchPostsEvent());
   }
 
-  Future<void> _fetchPosts() async {
-    try {
-      setState(() {
-        _isLoading = true;
-        _errorMessage = null;
-      });
-
-      final posts = await _apiService.fetchPosts();
-      
-      setState(() {
-        _posts = posts;
-        _filteredPosts = posts;
-        _isLoading = false;
-      });
-    } catch (e) {
-      setState(() {
-        _errorMessage = e.toString();
-        _isLoading = false;
-      });
-      print('Error fetching posts: $e');
-    }
-  }
-
-  Future<void> _refreshPosts() async {
-    await _fetchPosts();
-  }
-
-  Future<void> _performSearch(String userId, String postId) async {
-  setState(() {
-    _isSearching = true;
-    _errorMessage = null;
-  });
-
-  try {
-    await Future.delayed(const Duration(milliseconds: 800));
-
-    if (userId.isEmpty && postId.isEmpty) {
-      setState(() {
-        _filteredPosts = _posts;
-        _isSearching = false;
-        _currentSearchQuery = '';
-        _currentLocationQuery = '';
-      });
-      return;
-    }
-
-    final filteredResults = _posts.where((post) {
-      bool userIdMatch = true;
-      bool postIdMatch = true;
-
-      if (userId.isNotEmpty) {
-        try {
-          final searchUserId = int.parse(userId);
-          userIdMatch = post.userId == searchUserId;
-        } catch (e) {
-          userIdMatch = false;
-        }
-      }
-
-      if (postId.isNotEmpty) {
-        try {
-          final searchPostId = int.parse(postId);
-          postIdMatch = post.id == searchPostId;
-        } catch (e) {
-          postIdMatch = false;
-        }
-      }
-
-      return userIdMatch && postIdMatch;
-    }).toList();
-
-    setState(() {
-      _filteredPosts = filteredResults;
-      _isSearching = false;
-      _currentSearchQuery = userId; 
-      _currentLocationQuery = postId; 
-    });
-
-  } catch (e) {
-    setState(() {
-      _errorMessage = 'Search failed: ${e.toString()}';
-      _isSearching = false;
-    });
+  @override
+  Widget build(BuildContext context) {
+    return const MobileHomeView();
   }
 }
 
-  void _clearSearch() {
-    setState(() {
-      _filteredPosts = _posts;
-      _currentSearchQuery = '';
-      _currentLocationQuery = '';
-      _errorMessage = null;
-    });
-  }
+class MobileHomeView extends StatelessWidget {
+  const MobileHomeView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -133,36 +41,69 @@ class _MobileHomeLayoutState extends State<MobileHomeLayout> {
         padding: const EdgeInsets.all(12.0),
         child: Column(
           children: [
-            MobileSearchSection(
-              onSearch: _performSearch,
-              isLoading: _isSearching,
-              onClearSearch: _clearSearch,
+            BlocBuilder<PostsBloc, PostsState>(
+              buildWhen: (previous, current) =>
+                  current is PostsSearching || 
+                  (previous is PostsSearching && current is! PostsSearching),
+              builder: (context, state) {
+                bool isSearching = state is PostsSearching;
+                
+                return MobileSearchSection(
+                  onSearch: (userId, postId) {
+                    context.read<PostsBloc>().add(SearchPostsEvent(
+                      userId: userId,
+                      postId: postId,
+                    ));
+                  },
+                  isLoading: isSearching,
+                  onClearSearch: () {
+                    context.read<PostsBloc>().add(const ClearSearchEvent());
+                  },
+                );
+              },
             ),
             const SizedBox(height: 10),
             
             // Search Results Info
-            if (_currentSearchQuery.isNotEmpty || _currentLocationQuery.isNotEmpty)
-              Padding(
-                padding: const EdgeInsets.symmetric(vertical: 8.0),
-                child: Row(
-                  children: [
-                    Icon(Icons.search, size: 16, color: Colors.grey[600]),
-                    const SizedBox(width: 8),
-                    Expanded(
-                      child: Text(
-                        'Showing ${_filteredPosts.length} results for "${_currentSearchQuery.isNotEmpty ? _currentSearchQuery : 'all'}"${_currentLocationQuery.isNotEmpty ? ' in "$_currentLocationQuery"' : ''}',
-                        style: TextStyle(
-                          fontSize: 14,
-                          color: Colors.grey[600],
+            BlocBuilder<PostsBloc, PostsState>(
+              buildWhen: (previous, current) =>
+                  current is PostsLoaded ||
+                  (previous is PostsLoaded && current is! PostsLoaded),
+              builder: (context, state) {
+                if (state is! PostsLoaded) return const SizedBox.shrink();
+                
+                final hasSearch = state.currentSearchQuery.isNotEmpty || 
+                                 state.currentLocationQuery.isNotEmpty;
+                
+                if (!hasSearch) return const SizedBox.shrink();
+                
+                return Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 8.0),
+                  child: Row(
+                    children: [
+                      Icon(Icons.search, size: 16, color: Colors.grey[600]),
+                      const SizedBox(width: 8),
+                      Expanded(
+                        child: Text(
+                          'Showing ${state.filteredPosts.length} results for "${state.currentSearchQuery.isNotEmpty ? state.currentSearchQuery : 'all'}"${state.currentLocationQuery.isNotEmpty ? ' in "${state.currentLocationQuery}"' : ''}',
+                          style: TextStyle(
+                            fontSize: 14,
+                            color: Colors.grey[600],
+                          ),
                         ),
                       ),
-                    ),
-                  ],
-                ),
-              ),
+                    ],
+                  ),
+                );
+              },
+            ),
             
             Expanded(
-              child: _buildContent(),
+              child: BlocBuilder<PostsBloc, PostsState>(
+                builder: (context, state) {
+                  return _buildContent(context, state);
+                },
+              ),
             ),
           ],
         ),
@@ -170,8 +111,8 @@ class _MobileHomeLayoutState extends State<MobileHomeLayout> {
     );
   }
 
-  Widget _buildContent() {
-    if (_isLoading) {
+  Widget _buildContent(BuildContext context, PostsState state) {
+    if (state is PostsInitial || state is PostsLoading) {
       return const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -187,7 +128,7 @@ class _MobileHomeLayoutState extends State<MobileHomeLayout> {
       );
     }
 
-    if (_errorMessage != null) {
+    if (state is PostsError) {
       return Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -204,13 +145,15 @@ class _MobileHomeLayoutState extends State<MobileHomeLayout> {
             ),
             const SizedBox(height: 8),
             Text(
-              _errorMessage!,
+              state.message,
               textAlign: TextAlign.center,
               style: Theme.of(context).textTheme.bodyMedium,
             ),
             const SizedBox(height: 16),
             ElevatedButton(
-              onPressed: _refreshPosts,
+              onPressed: () {
+                context.read<PostsBloc>().add(const RefreshPostsEvent());
+              },
               child: const Text('Retry'),
             ),
           ],
@@ -218,7 +161,7 @@ class _MobileHomeLayoutState extends State<MobileHomeLayout> {
       );
     }
 
-    if (_isSearching) {
+    if (state is PostsSearching) {
       return const Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
@@ -234,50 +177,62 @@ class _MobileHomeLayoutState extends State<MobileHomeLayout> {
       );
     }
 
-    if (_filteredPosts.isEmpty) {
-      return Center(
-        child: Column(
-          mainAxisAlignment: MainAxisAlignment.center,
-          children: [
-            const Icon(
-              Icons.search_off,
-              size: 64,
-              color: Colors.grey,
-            ),
-            const SizedBox(height: 16),
-            Text(
-              _currentSearchQuery.isNotEmpty || _currentLocationQuery.isNotEmpty
-                  ? 'No results found'
-                  : 'No posts found',
-              style: const TextStyle(fontSize: 18),
-            ),
-            if (_currentSearchQuery.isNotEmpty || _currentLocationQuery.isNotEmpty) ...[
-              const SizedBox(height: 8),
-              const Text(
-                'Try adjusting your search terms',
-                style: TextStyle(fontSize: 14, color: Colors.grey),
+    if (state is PostsLoaded) {
+      if (state.filteredPosts.isEmpty) {
+        return Center(
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              const Icon(
+                Icons.search_off,
+                size: 64,
+                color: Colors.grey,
               ),
+              const SizedBox(height: 16),
+              Text(
+                state.currentSearchQuery.isNotEmpty || state.currentLocationQuery.isNotEmpty
+                    ? 'No results found'
+                    : 'No posts found',
+                style: const TextStyle(fontSize: 18),
+              ),
+              if (state.currentSearchQuery.isNotEmpty || state.currentLocationQuery.isNotEmpty) ...[
+                const SizedBox(height: 8),
+                const Text(
+                  'Try adjusting your search terms',
+                  style: TextStyle(fontSize: 14, color: Colors.grey),
+                ),
+              ],
             ],
-          ],
+          ),
+        );
+      }
+
+      return RefreshIndicator(
+        onRefresh: () async {
+          final bloc = context.read<PostsBloc>();
+          bloc.add(const RefreshPostsEvent());
+          
+          // Wait for the refresh to complete by listening to state changes
+          await bloc.stream.firstWhere(
+            (state) => state is! PostsLoading && state is! PostsSearching,
+          );
+        },
+        child: ListView.builder(
+          itemCount: state.filteredPosts.length,
+          itemBuilder: (context, index) {
+            final post = state.filteredPosts[index];
+            return Padding(
+              padding: const EdgeInsets.only(bottom: 8.0),
+              child: MobileCustomCard(
+                title: post.title,
+                desc: post.body,
+              ),
+            );
+          },
         ),
       );
     }
 
-    return RefreshIndicator(
-      onRefresh: _refreshPosts,
-      child: ListView.builder(
-        itemCount: _filteredPosts.length,
-        itemBuilder: (context, index) {
-          final post = _filteredPosts[index];
-          return Padding(
-            padding: const EdgeInsets.only(bottom: 8.0),
-            child: MobileCustomCard(
-              title: post.title,
-              desc: post.body,
-            ),
-          );
-        },
-      ),
-    );
+    return const SizedBox.shrink();
   }
 }

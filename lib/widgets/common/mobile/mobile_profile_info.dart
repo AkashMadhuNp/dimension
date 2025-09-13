@@ -48,6 +48,10 @@ class MobileProfileInfo extends StatelessWidget {
                 
                 // Employment Section
                 _buildEmploymentSection(),
+                const SizedBox(height: 16),
+
+
+
               ],
             ),
           ),

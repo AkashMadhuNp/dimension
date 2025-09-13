@@ -49,22 +49,28 @@ class TableProfileConatiner extends StatelessWidget {
                 children: [
                   Row(
                     children: [
-                      Container(
-                        width: 42.0 * fontScale,
-                        height: 42.0 * fontScale,
-                        decoration: BoxDecoration(
-                          color: AppConstants.secondaryColor.withOpacity(0.1),
-                          shape: BoxShape.circle,
-                          border: Border.all(
-                            color: AppConstants.secondaryColor.withOpacity(0.2),
-                            width: 2,
-                          ),
-                        ),
-                        child: Icon(
-                          Icons.person,
-                          size: 30.0 * fontScale,
-                          color: AppConstants.secondaryColor,
-                        ),
+                      // Container(
+                      //   width: 42.0 * fontScale,
+                      //   height: 42.0 * fontScale,
+                      //   decoration: BoxDecoration(
+                      //     color: AppConstants.secondaryColor.withOpacity(0.1),
+                      //     shape: BoxShape.circle,
+                      //     border: Border.all(
+                      //       color: AppConstants.secondaryColor.withOpacity(0.2),
+                      //       width: 2,
+                      //     ),
+                      //   ),
+                      //   child: Icon(
+                      //     Icons.person,
+                      //     size: 30.0 * fontScale,
+                      //     color: AppConstants.secondaryColor,
+                      //   ),
+                      // ),
+
+                      CircleAvatar(
+                        radius: 42.0*fontScale,
+                        backgroundImage: NetworkImage(AppConstants.userProfileImage),
+
                       ),
                 
                       const SizedBox(width: 20),
