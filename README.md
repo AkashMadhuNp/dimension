@@ -1,16 +1,45 @@
-# dimension_machine_task
+Dimension Machine Task
 
-A new Flutter project.
+A Flutter technical assessment project integrating API data and search functionality.
 
-## Getting Started
+📌 Project Overview
 
-This project is a starting point for a Flutter application.
+This project is built as part of a Flutter technical evaluation.
+It demonstrates:
 
-A few resources to get you started if this is your first Flutter project:
+API integration using the JSONPlaceholder
+ posts endpoint
 
-- [Lab: Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Cookbook: Useful Flutter samples](https://docs.flutter.dev/cookbook)
+Search functionality for posts data
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+Clean and modular code structure 
+
+Responsive UI for multiple screen sizes
+
+🚀 Features
+
+Fetch posts data from REST API
+
+Display posts in a user-friendly list format
+
+Search posts by title/content
+
+Well-structured project with clear separation of concerns
+
+🛠️ Tech Stack
+
+Flutter (latest stable version)
+
+Dart
+
+http package for API calls
+
+ BLoC 
+
+ ✨ Author
+
+Akash Madhu NP
+📧 002akashakz@gmail.com
+
+📱 7025522432
+
