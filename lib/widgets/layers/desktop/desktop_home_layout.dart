@@ -1,12 +1,13 @@
 import 'package:dimension_machine_task/bloc/mob_hom_lay_bloc.dart';
 import 'package:dimension_machine_task/bloc/mob_hom_lay_event.dart';
 import 'package:dimension_machine_task/bloc/mob_hom_lay_state.dart';
+import 'package:dimension_machine_task/screen/profile_screen.dart';
+import 'package:dimension_machine_task/widgets/common/responsive_profile_card.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:dimension_machine_task/core/responsive_calculator.dart';
 import 'package:dimension_machine_task/widgets/layers/desktop/desktop_custom_card.dart';
 import 'package:dimension_machine_task/widgets/layers/desktop/desktop_search_bar.dart';
-import 'package:dimension_machine_task/widgets/common/responsive_profile_card.dart';
 import 'package:dimension_machine_task/widgets/layers/desktop/desktop_appbar.dart';
 class DesktopHomeLayout extends StatefulWidget {
   const DesktopHomeLayout({super.key});
@@ -115,15 +116,20 @@ class _DesktopHomeLayoutState extends State<DesktopHomeLayout> {
             
             Expanded(
               flex: 3,
-              child: ResponsiveProfileContainer(
-                screenHeight: responsive.screenHeight,
-                screenWidth: responsive.screenWidth,
-                fontScale: responsive.fontScale,
-                responsiveFontLarge: responsive.responsiveFontLarge,
-                responsiveFontMedium: responsive.responsiveFontMedium,
-                responsiveFontSmall: responsive.responsiveFontSmall,
-                responsiveFontExtraSmall: responsive.responsiveFontExtraSmall,
-                isDesktop: true,
+              child: GestureDetector(
+                onTap: () {
+                  Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfileScreen(),));
+                },                
+                child: ResponsiveProfileContainer(
+                  screenHeight: responsive.screenHeight,
+                  screenWidth: responsive.screenWidth,
+                  fontScale: responsive.fontScale,
+                  responsiveFontLarge: responsive.responsiveFontLarge,
+                  responsiveFontMedium: responsive.responsiveFontMedium,
+                  responsiveFontSmall: responsive.responsiveFontSmall,
+                  responsiveFontExtraSmall: responsive.responsiveFontExtraSmall,
+                  isDesktop: true,
+                ),
               ),
             ),
           ],

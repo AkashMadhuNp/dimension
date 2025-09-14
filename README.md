@@ -36,6 +36,18 @@ http package for API calls
 
  BLoC 
 
+
+ 📂 Project Structure
+
+ lib/
+│── core/              # App constants, utilities
+│── models/            # Data models
+│── services/          # API and data services
+│── screens/           # UI screens
+│── widgets/           # Reusable UI components
+│── main.dart          # Entry point
+
+
  ✨ Author
 
 Akash Madhu NP

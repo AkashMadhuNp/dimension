@@ -1,6 +1,7 @@
 import 'package:dimension_machine_task/core/app_constant.dart';
 import 'package:dimension_machine_task/widgets/common/custom_button.dart';
 import 'package:dimension_machine_task/widgets/common/custom_container.dart';
+import 'package:dimension_machine_task/widgets/layers/desktop/desktop_profile_screen_layout.dart';
 import 'package:flutter/material.dart';
 
 class TableProfileConatiner extends StatelessWidget {
@@ -31,121 +32,126 @@ class TableProfileConatiner extends StatelessWidget {
       child: Column(
         children: [
           
-          Container(
-            height: (screenHeight * 0.55) * 0.4, 
-            width: screenWidth * 0.32,
-            decoration: BoxDecoration(
-              borderRadius: const BorderRadius.only(
-                topLeft: Radius.circular(12),
-                topRight: Radius.circular(12)
+          GestureDetector(
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(builder: (context) => ProfileScreenLayout(),));
+            },
+            child: Container(
+              height: (screenHeight * 0.55) * 0.4, 
+              width: screenWidth * 0.32,
+              decoration: BoxDecoration(
+                borderRadius: const BorderRadius.only(
+                  topLeft: Radius.circular(12),
+                  topRight: Radius.circular(12)
+                ),
+                color: Colors.grey.shade200,
               ),
-              color: Colors.grey.shade200,
-            ),
-            child: Padding(
-              padding: const EdgeInsets.all(15.0),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.start,
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Row(
-                    children: [
-                      // Container(
-                      //   width: 42.0 * fontScale,
-                      //   height: 42.0 * fontScale,
-                      //   decoration: BoxDecoration(
-                      //     color: AppConstants.secondaryColor.withOpacity(0.1),
-                      //     shape: BoxShape.circle,
-                      //     border: Border.all(
-                      //       color: AppConstants.secondaryColor.withOpacity(0.2),
-                      //       width: 2,
-                      //     ),
-                      //   ),
-                      //   child: Icon(
-                      //     Icons.person,
-                      //     size: 30.0 * fontScale,
-                      //     color: AppConstants.secondaryColor,
-                      //   ),
-                      // ),
-
-                      CircleAvatar(
-                        radius: 42.0*fontScale,
-                        backgroundImage: NetworkImage(AppConstants.userProfileImage),
-
-                      ),
-                
-                      const SizedBox(width: 20),
-                
-                      Expanded(
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              "John Wick Paul III",
-                              style: TextStyle(
-                                fontSize: responsiveFontLarge,
-                                fontWeight: FontWeight.w600,
-                                color: Colors.black87,
-                              ),
-                              maxLines: 2,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            const SizedBox(height: 4),
-                            Text(
-                              "Senior Database Analyst\nOrr AppData Inc.",
-                              style: TextStyle(
-                                fontSize: responsiveFontMedium,
-                                fontWeight: FontWeight.w400,
-                                color: AppConstants.greyColor,
-                                height: 1.3,
-                              ),
-                              maxLines: 3,
-                              overflow: TextOverflow.ellipsis,
-                            ),
-                            const SizedBox(height: 8),
-    
-                            
-                            Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                              crossAxisAlignment: CrossAxisAlignment.start,
-                              children: [
-                                Expanded(
-                                  child: Text(
-                                    "Edit Resume",
-                                    style: TextStyle(
-                                      fontSize: responsiveFontSmall,
-                                      fontWeight: FontWeight.w500,
-                                      color: AppConstants.secondaryColor,
-                                      decoration: TextDecoration.underline,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                  ),
-                                ),
-    
-                                const SizedBox(width: 8), 
-                                
-                                Expanded(
-                                  child: Text(
-                                    "Update Resume",
-                                    style: TextStyle(
-                                      fontSize: responsiveFontSmall,
-                                      fontWeight: FontWeight.w500,
-                                      color: AppConstants.secondaryColor,
-                                      decoration: TextDecoration.underline,
-                                    ),
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    textAlign: TextAlign.end, 
-                                  ),
-                                ),
-                              ],
-                            )
-                          ],
+              child: Padding(
+                padding: const EdgeInsets.all(15.0),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.start,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Row(
+                      children: [
+                        // Container(
+                        //   width: 42.0 * fontScale,
+                        //   height: 42.0 * fontScale,
+                        //   decoration: BoxDecoration(
+                        //     color: AppConstants.secondaryColor.withOpacity(0.1),
+                        //     shape: BoxShape.circle,
+                        //     border: Border.all(
+                        //       color: AppConstants.secondaryColor.withOpacity(0.2),
+                        //       width: 2,
+                        //     ),
+                        //   ),
+                        //   child: Icon(
+                        //     Icons.person,
+                        //     size: 30.0 * fontScale,
+                        //     color: AppConstants.secondaryColor,
+                        //   ),
+                        // ),
+            
+                        CircleAvatar(
+                          radius: 42.0*fontScale,
+                          backgroundImage: NetworkImage(AppConstants.userProfileImage),
+            
                         ),
-                      ),
-                    ],
-                  ),
-                ],
+                  
+                        const SizedBox(width: 20),
+                  
+                        Expanded(
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              Text(
+                                "John Wick Paul III",
+                                style: TextStyle(
+                                  fontSize: responsiveFontLarge,
+                                  fontWeight: FontWeight.w600,
+                                  color: Colors.black87,
+                                ),
+                                maxLines: 2,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                "Senior Database Analyst\nOrr AppData Inc.",
+                                style: TextStyle(
+                                  fontSize: responsiveFontMedium,
+                                  fontWeight: FontWeight.w400,
+                                  color: AppConstants.greyColor,
+                                  height: 1.3,
+                                ),
+                                maxLines: 3,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+                              const SizedBox(height: 8),
+                
+                              
+                              Row(
+                                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Expanded(
+                                    child: Text(
+                                      "Edit Resume",
+                                      style: TextStyle(
+                                        fontSize: responsiveFontSmall,
+                                        fontWeight: FontWeight.w500,
+                                        color: AppConstants.secondaryColor,
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                    ),
+                                  ),
+                
+                                  const SizedBox(width: 8), 
+                                  
+                                  Expanded(
+                                    child: Text(
+                                      "Update Resume",
+                                      style: TextStyle(
+                                        fontSize: responsiveFontSmall,
+                                        fontWeight: FontWeight.w500,
+                                        color: AppConstants.secondaryColor,
+                                        decoration: TextDecoration.underline,
+                                      ),
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      textAlign: TextAlign.end, 
+                                    ),
+                                  ),
+                                ],
+                              )
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
